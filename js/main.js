@@ -85,6 +85,53 @@ $(document).ready(function (){
 	}
 });
 
+Notification.requestPermission(function (status){
+	console.log("Notif permision status",status);
+
+	function displayNotification(title, msg, url, img='images/ugm.png'){
+		if (Notification.permission === "granted"){ //kalo sama dengan ada 3, maka benar2 harus bener qwkwkwkwk
+			navigator.serviceWorker.getRegistration().then(function (reg){
+				var options = {
+					body : 'Ini adalah notification',
+					icon : 'images/ugm.png',
+					vibrate : [100,50,100],
+					data : {
+						dataOfArrival : Date.now(),
+						primaryKey : 1 //hanya muncul sekali
+					},
+					url : url,
+					actions : [
+						{action: 'explore', title: 'Kunjungi Situs',
+						icon: 'images/centang.png'},
+						{action: 'close', title: 'Close Notification',
+						icon: 'images/times.png'},
+					]
+				};
+				reg.showNotification('Ini Notification',options)
+			})
+		}
+	}
+	$("#show-notification").on('click', function(){
+		displayNotification("Lorem Ipsum", "sit dolor amet", "https://google.com/", "images/ugm.png");
+	});
+
+	function isOnline(){
+		var connectionStatus = $('#online-status');
+		if(navigator.onLine){
+			connectionStatus.html = '<p>Anda online</p>';
+		}else{
+			connectionStatus.html = '<p>Anda offline</p>';
+		}
+	}
+
+	window.addEventListener('online',isOnline);
+	window.addEventListener('offline',isOnline);
+	isOnline();
+});
+
+
+
+
 
 
 
